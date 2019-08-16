@@ -27,6 +27,7 @@ public class App
         SparkSession spark = SparkSession.builder()
                 .appName("Spark Parsing XML - Session")
                 .master("spark://192.168.10.14:7077")
+                .config("spark.executor.memory", "4g")
                 .getOrCreate();
         
         Dataset<Row> pagelinks = spark.read()
