@@ -12,7 +12,6 @@ public class App
 {
     public static void main( String[] args )
     {
-        
         SparkSession spark = SparkSession.builder()
                 .appName("Spark Parsing XML - Session")
                 .master("local")
@@ -21,9 +20,11 @@ public class App
         Dataset<Row> df = spark.read()
                 .format("avro")
                 .option("basePath", "hdfs://hdfs-namenode:9000/schemas/stub-meta/")
-                .load("*.avsc");
+                .load(args[1].split(","));
         
         df.printSchema();
+        
+        df.select("title = '" + args[0]).show();
         
         System.out.println( "Hello World!" );
     }
