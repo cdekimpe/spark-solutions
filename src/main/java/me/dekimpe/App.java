@@ -20,7 +20,8 @@ public class App
         
         Dataset<Row> df = spark.read()
                 .format("avro")
-                .load("hdfs://hdfs-namenode:9000/schemas/" + args[0]);
+                .option("basePath", "hdfs://hdfs-namenode:9000/schemas/stub-meta/")
+                .load("*.avsc");
         
         df.printSchema();
         
