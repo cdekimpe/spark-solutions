@@ -15,7 +15,7 @@ public class App
     public static void main( String[] args )
     {
         
-        String hdfsInput = "hdfs://hdfs-namenode:9000/schemas/";
+        String pagelinksFile = "hdfs://hdfs-namenode:9000/schemas/frwiki-latest.pagelinks.avsc";
         String stubPath = "hdfs://hdfs-namenode:9000/schemas/stub-meta/";
         
         String subject = args[0];
@@ -33,7 +33,7 @@ public class App
         
         Dataset<Row> pagelinks = spark.read()
                 .format("avro")
-                .load(hdfsInput + args[1])
+                .load(pagelinksFile)
                 .filter("title = '" + subject + "'")
                 .withColumnRenamed("id", "pl_id")
                 .withColumnRenamed("title", "pl_title");
