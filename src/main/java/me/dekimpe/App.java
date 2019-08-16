@@ -26,7 +26,7 @@ public class App
         
         Dataset<Row> revisions = spark.read()
                 .format("avro")
-                .load(stubPath);
+                .load(stubPath + "stub-1.avsc", stubPath + "stub-6.avsc");
         
         pagelinks.printSchema();
         revisions.printSchema();
