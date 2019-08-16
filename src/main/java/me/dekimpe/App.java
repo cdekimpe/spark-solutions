@@ -26,7 +26,7 @@ public class App
         
         df.printSchema();
         
-        df.select("title = " + args[0]).show();
+        df.select("title = '" + args[0] + "'").show();
         
         System.out.println( "Hello World!" );
     }
