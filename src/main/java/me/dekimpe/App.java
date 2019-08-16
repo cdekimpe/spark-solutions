@@ -33,11 +33,8 @@ public class App
         
         Dataset<Row> joined = pagelinks.join(revisions, "id").cache();
         Dataset<Row> exploded = joined.select(joined.col("id"), explode(joined.col("revision")));
-        Dataset<Row> result = exploded.groupBy("col.contributor.username").agg(count("*").as("NumberOfRevisions")).cache();
+        Dataset<Row> result = exploded.groupBy("col.contributor.username").agg(count("*").as("NumberOfRevisions")).orderBy("NumberOfRevisions").cache();
         
         result.show();
-        System.out.println(result.orderBy("NumberOfRevisions"));
-        System.out.println("Number of rows : " + joined.count());
-        System.out.println( "Hello World!" );
     }
 }
