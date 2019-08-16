@@ -32,7 +32,7 @@ public class App
                 .load(stubPath + "stub-1.avsc"); //, stubPath + "stub-6.avsc"
         
         Dataset<Row> joined = pagelinks.join(revisions, "id").cache();
-        Dataset<Row> exploded = joined.select(joined.col("id"), joined.col("title"), explode(joined.col("revision")));
+        Dataset<Row> exploded = joined.select(joined.col("id"), explode(joined.col("revision")));
         Dataset<Row> result = exploded.groupBy("contributor.name").agg(count("*").as("Number of revisions"));
         
         System.out.println(result.orderBy("Number of revisions").take(5));
