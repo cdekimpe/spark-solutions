@@ -20,7 +20,7 @@ public class App
         Dataset<Row> df = spark.read()
                 .format("avro")
                 .option("basePath", "hdfs://hdfs-namenode:9000/schemas/stub-meta/")
-                .load(args[1].split(","));
+                .load(args[1], args[2]);
         
         df.printSchema();
         
