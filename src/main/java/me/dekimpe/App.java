@@ -22,15 +22,20 @@ public class App
         
         Dataset<Row> pagelinks = spark.read()
                 .format("avro")
-                .load(hdfsInput + args[1]);
+                .load(hdfsInput + args[1])
+                .filter("title = '" + args[0] + "'");
         
         Dataset<Row> revisions = spark.read()
                 .format("avro")
                 .load(stubPath + "stub-1.avsc", stubPath + "stub-6.avsc");
         
-        pagelinks.printSchema();
-        revisions.printSchema();
+        /*pagelinks.filter("title = '" + args[0] + "'").collect();
         
+        Dataset<Row> joined = pagelinks.join(revisions, pagelinks. revisions.join(pagelinks, pagelinks.filter(array_contains()));*/
+        
+        pagelinks.printSchema();
+        revisions.printSchema(); 
+       
         //revisions.filter("title = '" + args[0] + "'").show();
         
         System.out.println( "Hello World!" );
