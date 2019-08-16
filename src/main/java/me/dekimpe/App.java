@@ -20,7 +20,7 @@ public class App
         
         String subject = args[0];
         String[] schemas = new String[6];
-        for (int u = 0; u < 6; u++) {
+        for (int u = 1; u < 7; u++) {
             schemas[u] = stubPath + "stub-" + u + ".avsc";
         }
         
