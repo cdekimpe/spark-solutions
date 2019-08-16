@@ -14,6 +14,13 @@ public class App
 {
     public static void main( String[] args )
     {
+        
+        String subject = args[0];
+        String[] schemas = new String[args.length - 1];
+        for (int u = 1; u < args.length; u++) {
+            
+        }
+        
         String hdfsInput = "hdfs://hdfs-namenode:9000/schemas/";
         String stubPath = "hdfs://hdfs-namenode:9000/schemas/stub-meta/";
         
@@ -25,13 +32,13 @@ public class App
         Dataset<Row> pagelinks = spark.read()
                 .format("avro")
                 .load(hdfsInput + args[1])
-                .filter("title = '" + args[0] + "'");
+                .filter("title = '" + subject + "'");
         
         Dataset<Row> revisions = spark.read()
                 .format("avro")
-                .load(stubPath + "stub-1.avsc"); //, stubPath + "stub-6.avsc"
+                .load(stubPath + "stub-1.avsc").cache(); //, stubPath + "stub-6.avsc"
         
-        Dataset<Row> joined = pagelinks.join(revisions, "id").cache();
+        Dataset<Row> joined = pagelinks.join(revisions, revisions.col("id"), "left_outer").where("title = '" + subject + "'");
         Dataset<Row> exploded = joined.select(joined.col("id"), explode(joined.col("revision")));
         Dataset<Row> result = exploded.groupBy("col.contributor.username").agg(count("*").as("NumberOfRevisions")).orderBy("NumberOfRevisions").cache();
         
