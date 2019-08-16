@@ -27,14 +27,14 @@ public class App
         
         Dataset<Row> revisions = spark.read()
                 .format("avro")
-                .load(stubPath + "stub-1.avsc", stubPath + "stub-6.avsc");
+                .load(stubPath + "stub-1.avsc"); //, stubPath + "stub-6.avsc"
         
-        /*pagelinks.filter("title = '" + args[0] + "'").collect();
+        //pagelinks.filter("title = '" + args[0] + "'").collect();
         
-        Dataset<Row> joined = pagelinks.join(revisions, pagelinks. revisions.join(pagelinks, pagelinks.filter(array_contains()));*/
+        Dataset<Row> joined = pagelinks.join(revisions, "id");
+        joined.show();
         
-        pagelinks.printSchema();
-        revisions.printSchema(); 
+        joined.printSchema();
        
         //revisions.filter("title = '" + args[0] + "'").show();
         
