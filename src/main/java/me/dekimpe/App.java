@@ -12,6 +12,7 @@ public class App
 {
     public static void main( String[] args )
     {
+        String hdfsInput = "hdfs://hdfs-namenode:9000/schemas/";
         String stubPath = "hdfs://hdfs-namenode:9000/schemas/stub-meta/";
         
         SparkSession spark = SparkSession.builder()
@@ -19,14 +20,18 @@ public class App
                 .master("local")
                 .getOrCreate();
         
-        Dataset<Row> df = spark.read()
+        Dataset<Row> pagelinks = spark.read()
                 .format("avro")
-                .option("basePath", "hdfs://hdfs-namenode:9000/schemas/stub-meta/")
-                .load(stubPath + args[1], stubPath + args[2]);
+                .load(hdfsInput + args[1]);
         
-        df.printSchema();
+        Dataset<Row> revisions = spark.read()
+                .format("avro")
+                .load(stubPath);
         
-        df.filter("title = '" + args[0] + "'").show();
+        pagelinks.printSchema();
+        revisions.printSchema();
+        
+        //revisions.filter("title = '" + args[0] + "'").show();
         
         System.out.println( "Hello World!" );
     }
