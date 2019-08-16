@@ -21,7 +21,8 @@ public class App
         String subject = args[0];
         String[] schemas = new String[6];
         for (int u = 0; u < 6; u++) {
-            schemas[u] = stubPath + "stub-" + u + 1 + ".avsc";
+            int i = u+1;
+            schemas[u] = stubPath + "stub-" + i + ".avsc";
         }
         
         SparkSession spark = SparkSession.builder()
