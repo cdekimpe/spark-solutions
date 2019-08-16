@@ -20,7 +20,7 @@ public class App
         
         Dataset<Row> df = spark.read()
                 .format("avro")
-                .load("hdfs://hdfs-namenode:9000/input/" + args[0]);
+                .load("hdfs://hdfs-namenode:9000/schemas/" + args[0]);
         
         df.printSchema();
         
