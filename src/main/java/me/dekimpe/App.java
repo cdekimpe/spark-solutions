@@ -12,6 +12,8 @@ public class App
 {
     public static void main( String[] args )
     {
+        String stubPath = "hdfs://hdfs-namenode:9000/schemas/stub-meta/";
+        
         SparkSession spark = SparkSession.builder()
                 .appName("Spark Parsing XML - Session")
                 .master("local")
@@ -20,7 +22,7 @@ public class App
         Dataset<Row> df = spark.read()
                 .format("avro")
                 .option("basePath", "hdfs://hdfs-namenode:9000/schemas/stub-meta/")
-                .load(args[1], args[2]);
+                .load(stubPath + args[1], stubPath + args[2]);
         
         df.printSchema();
         
