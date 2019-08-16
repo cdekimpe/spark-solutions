@@ -15,14 +15,14 @@ public class App
     public static void main( String[] args )
     {
         
-        String subject = args[0];
-        String[] schemas = new String[args.length - 1];
-        for (int u = 1; u < args.length; u++) {
-            
-        }
-        
         String hdfsInput = "hdfs://hdfs-namenode:9000/schemas/";
         String stubPath = "hdfs://hdfs-namenode:9000/schemas/stub-meta/";
+        
+        String subject = args[0];
+        String[] schemas = new String[6];
+        for (int u = 0; u < 6; u++) {
+            schemas[u] = stubPath + "stub-" + u + ".avsc";
+        }
         
         SparkSession spark = SparkSession.builder()
                 .appName("Spark Parsing XML - Session")
@@ -39,13 +39,14 @@ public class App
         
         Dataset<Row> revisions = spark.read()
                 .format("avro")
-                .load(stubPath + "stub-1.avsc").cache(); //, stubPath + "stub-6.avsc"
+                .load(schemas); //, stubPath + "stub-6.avsc"
         
         //Dataset<Row> joined = pagelinks.join(revisions, pagelinks.col("pl_id").equalTo(revisions.col("id")));
         Dataset<Row> joined = pagelinks.join(revisions, pagelinks.col("pl_id").equalTo(revisions.col("id")), "outer").where("pl_title = '" + subject + "' or title = '" + subject + "'");//(pagelinks.col("pl_title").equalTo(subject)).or(revisions.col("title").equalTo(subject))).cache();
         Dataset<Row> exploded = joined.select(joined.col("pl_id"), explode(joined.col("revision"))).groupBy("col.contributor.username").agg(count("*").as("NumberOfRevisions"));
-        Dataset<Row> result = exploded.orderBy(exploded.col("NumberOfRevisions").desc());
+        Dataset<Row> result = exploded.orderBy(exploded.col("NumberOfRevisions").desc()).cache();
         
+        System.out.println("Nombre de contributeurs : " + result.count());
         result.show();
     }
 }
