@@ -21,22 +21,23 @@ public class App
                 .master("local")
                 .getOrCreate();
         
-        Dataset<Row> pagelinks = spark.read()
+        /*Dataset<Row> pagelinks = spark.read()
                 .format("avro")
                 .load(hdfsInput + args[1])
-                .filter("title = '" + args[0] + "'");
+                .filter("title = '" + args[0] + "'");*/
         
         Dataset<Row> revisions = spark.read()
                 .format("avro")
                 .load(stubPath + "stub-1.avsc"); //, stubPath + "stub-6.avsc"
         
-        Dataset<Row> joined = pagelinks.join(revisions, "id").cache();
+        /*Dataset<Row> joined = pagelinks.join(revisions, "id").cache();
         
         System.out.println("Number of rows : " + joined.count());
         System.out.println(joined.select("revision").groupBy("contributor.name").agg(count("*").as("Number of revisions")));
        
-        //revisions.filter("title = '" + args[0] + "'").show();
+        //revisions.filter("title = '" + args[0] + "'").show();*/
         
+        revisions.printSchema();
         System.out.println( "Hello World!" );
     }
 }
