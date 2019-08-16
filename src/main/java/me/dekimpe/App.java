@@ -33,7 +33,7 @@ public class App
         Dataset<Row> joined = pagelinks.join(revisions, "id").cache();
         
         System.out.println("Number of rows : " + joined.count());
-        System.out.println(joined.select("revision").groupBy("element.contributor.name").agg(count("*").as("Number of revisions")));
+        System.out.println(joined.select("revision").groupBy("contributor.name").agg(count("*").as("Number of revisions")));
        
         //revisions.filter("title = '" + args[0] + "'").show();
         
