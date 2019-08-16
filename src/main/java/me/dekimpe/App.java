@@ -1,5 +1,9 @@
 package me.dekimpe;
 
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SparkSession;
+
 /**
  * Hello world!
  *
@@ -9,16 +13,16 @@ public class App
     public static void main( String[] args )
     {
         
-        /*SparkSession spark = SparkSession.builder()
+        SparkSession spark = SparkSession.builder()
                 .appName("Spark Parsing XML - Session")
-                .master("spark://192.168.10.14:7077")
+                .master("local")
                 .getOrCreate();
         
         Dataset<Row> df = spark.read()
-                .format("com.databricks.spark.xml")
-                .option("rootTag", "mediawiki")
-                .option("rowTag", "page")
-                .load("hdfs://hdfs-namenode:9000/input/" + args[0]);*/
+                .format("avro")
+                .load("hdfs://hdfs-namenode:9000/input/" + args[0]);
+        
+        df.printSchema();
         
         System.out.println( "Hello World!" );
     }
