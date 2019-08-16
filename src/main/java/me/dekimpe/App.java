@@ -41,10 +41,10 @@ public class App
                 .format("avro")
                 .load(stubPath + "stub-1.avsc").cache(); //, stubPath + "stub-6.avsc"
         
-        Dataset<Row> joined = pagelinks.join(revisions, pagelinks.col("pl_id").equalTo(revisions.col("id")));
-        //Dataset<Row> joined = pagelinks.join(revisions, pagelinks.col("pl_id").equalTo(revisions.col("id")), "outer").where("pl_title = '" + subject + "' or title = '" + subject + "'");//(pagelinks.col("pl_title").equalTo(subject)).or(revisions.col("title").equalTo(subject))).cache();
-        Dataset<Row> exploded = joined.select(joined.col("pl_id"), explode(joined.col("revision")));
-        Dataset<Row> result = exploded.groupBy("col.contributor.username").agg(count("*").as("NumberOfRevisions")).orderBy("NumberOfRevisions").cache();
+        //Dataset<Row> joined = pagelinks.join(revisions, pagelinks.col("pl_id").equalTo(revisions.col("id")));
+        Dataset<Row> joined = pagelinks.join(revisions, pagelinks.col("pl_id").equalTo(revisions.col("id")), "outer").where("pl_title = '" + subject + "' or title = '" + subject + "'");//(pagelinks.col("pl_title").equalTo(subject)).or(revisions.col("title").equalTo(subject))).cache();
+        Dataset<Row> exploded = joined.select(joined.col("pl_id"), explode(joined.col("revision"))).groupBy("col.contributor.username").agg(count("*").as("NumberOfRevisions"));
+        Dataset<Row> result = exploded.orderBy(exploded.col("NumberOfRevisions").desc());
         
         result.show();
     }
