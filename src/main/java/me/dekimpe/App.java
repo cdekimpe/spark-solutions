@@ -3,6 +3,7 @@ package me.dekimpe;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
+import static org.apache.spark.sql.functions.count;
 
 /**
  * Hello world!
@@ -29,12 +30,10 @@ public class App
                 .format("avro")
                 .load(stubPath + "stub-1.avsc"); //, stubPath + "stub-6.avsc"
         
-        //pagelinks.filter("title = '" + args[0] + "'").collect();
+        Dataset<Row> joined = pagelinks.join(revisions, "id").cache();
         
-        Dataset<Row> joined = pagelinks.join(revisions, "id");
-        joined.show();
-        
-        joined.printSchema();
+        System.out.println("Number of rows : " + joined.count());
+        System.out.println(joined.select("revision").groupBy("element.contributor.name").agg(count("*").as("Number of revisions")));
        
         //revisions.filter("title = '" + args[0] + "'").show();
         
