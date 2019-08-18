@@ -16,7 +16,7 @@ public class App
     public static void main( String[] args )
     {
         
-        String pagelinksFile = "hdfs://hdfs-namenode:9000/schemas/frwiki-latest.pagelinks.avsc";
+        String pagelinksFile = "hdfs://hdfs-namenode:9000/schemas/pagelinks.avsc";
         String stubPath = "hdfs://hdfs-namenode:9000/schemas/";
         
         String subject = args[0];
