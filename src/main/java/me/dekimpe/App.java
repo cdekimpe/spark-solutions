@@ -2,6 +2,7 @@ package me.dekimpe;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SaveMode;
 import org.apache.spark.sql.SparkSession;
 import static org.apache.spark.sql.functions.count;
 import static org.apache.spark.sql.functions.explode;
@@ -46,7 +47,6 @@ public class App
         Dataset<Row> exploded = joined.select(joined.col("pl_id"), explode(joined.col("revision"))).groupBy("col.contributor.username").agg(count("*").as("NumberOfRevisions"));
         Dataset<Row> result = exploded.orderBy(exploded.col("NumberOfRevisions").desc()).cache();
         
-        System.out.println("Nombre de contributeurs : " + result.count());
-        result.show();
+        result.write().mode(SaveMode.Overwrite).format("csv").save("hdfs://hdfs-namenode:9000/schemas/" + args[1]);
     }
 }
