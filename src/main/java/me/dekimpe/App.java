@@ -43,11 +43,15 @@ public class App
                 .format("avro")
                 .load(schemas); //, stubPath + "stub-6.avsc"
         
-        Dataset<Row> joined = pagelinks.join(revisions, pagelinks.col("pl_id").equalTo(revisions.col("id")), "outer").where("pl_title = '" + subject + "' or title = '" + subject + "'");
-        Dataset<Row> exploded = joined.select(joined.col("pl_id"), explode(joined.col("revision"))).groupBy("col.contributor.username").agg(count("*").as("NumberOfRevisions"));
+        Dataset<Row> joined = pagelinks.join(revisions, pagelinks.col("pl_id").equalTo(revisions.col("id")), "outer").where("pl_title = '" + subject + "' or title = '" + subject + "'").cache();
+        joined.printSchema();
+        joined.show();
+        /*Dataset<Row> exploded = joined.select(joined.col("pl_id"), explode(joined.col("revision"))).groupBy("col.contributor.username").agg(count("*").as("NumberOfRevisions"));
         Dataset<Row> result = exploded.orderBy(exploded.col("NumberOfRevisions").desc()).cache();
         
+        
         result.show();
-        result.write().mode(SaveMode.Overwrite).format("csv").option("header", "true").save("hdfs://hdfs-namenode:9000/output/" + args[0] + ".csv");
+        result.write().mode(SaveMode.Overwrite).format("csv").option("header", "true").save("hdfs://hdfs-namenode:9000/output/" + args[0] + ".csv");*/
+        
     }
 }
