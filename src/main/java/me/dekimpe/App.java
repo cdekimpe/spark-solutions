@@ -45,7 +45,7 @@ public class App
         
         Dataset<Row> joined = pagelinks.join(revisions, pagelinks.col("pl_id").equalTo(revisions.col("id")), "outer").where("pl_title = '" + subject + "' or title = '" + subject + "'").cache();
         joined.printSchema();
-        joined.show(100, 0, true);
+        joined.show(100, 100, true);
         /*Dataset<Row> exploded = joined.select(joined.col("pl_id"), explode(joined.col("revision"))).groupBy("col.contributor.username").agg(count("*").as("NumberOfRevisions"));
         Dataset<Row> result = exploded.orderBy(exploded.col("NumberOfRevisions").desc()).cache();
         
