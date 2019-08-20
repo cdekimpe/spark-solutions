@@ -43,7 +43,7 @@ public class App
                 .format("avro")
                 .load(schemas); //, stubPath + "stub-6.avsc"
         
-        Dataset<Row> joined = pagelinks.join(revisions, pagelinks.col("pl_id").equalTo(revisions.col("id")), "outer").where("pl_title = '" + subject + "' and (title = 'Apache_Spark' or title = 'Apache_Storm')").cache();
+        Dataset<Row> joined = pagelinks.join(revisions, pagelinks.col("pl_id").equalTo(revisions.col("id")), "outer").where("title = 'Apache_Spark' or title = 'Apache_Storm'").cache();
         joined.printSchema();
         joined.show(2, 100, true);
         /*Dataset<Row> exploded = joined.select(joined.col("pl_id"), explode(joined.col("revision"))).groupBy("col.contributor.username").agg(count("*").as("NumberOfRevisions"));
